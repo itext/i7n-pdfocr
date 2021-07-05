@@ -472,6 +472,7 @@ namespace iText.Pdfocr.Tesseract4 {
                     temp.SetResolution(2 * xResolution, 2 * yResolution);
                     bitmapList.Add(temp);
                 }
+                originalImage.Dispose();
                 SetListOfPages(bitmapList);
             } catch (Exception e)
             {
@@ -514,6 +515,7 @@ namespace iText.Pdfocr.Tesseract4 {
                 }
                 image.SelectActiveFrame(FrameDimension.Page, page);
                 img = new Bitmap(image);
+                image.Dispose();
             } catch (Exception e)
             {
                 LogManager.GetLogger(typeof(TesseractOcrUtil))
@@ -889,8 +891,8 @@ namespace iText.Pdfocr.Tesseract4 {
         {
             try
             {
-                System.Drawing.Image image = System.Drawing.Image.FromFile(inputFile.FullName);
-                return ReadRotationFromMetadata(image);
+                using (System.Drawing.Image image = System.Drawing.Image.FromFile(inputFile.FullName))
+                    return ReadRotationFromMetadata(image);
             }
             catch (Exception e)
             {

@@ -9,7 +9,7 @@
     <OutputType>library</OutputType>
   </PropertyGroup>
   <PropertyGroup>
-    <TargetFramework>net45</TargetFramework>
+    <TargetFramework>net46</TargetFramework>
   </PropertyGroup>
   <PropertyGroup>
     <SignAssembly>true</SignAssembly>

@@ -284,6 +284,62 @@ namespace iText.Pdfocr.General {
             }
         }
 
+        [NUnit.Framework.Test]
+        public virtual void TestTiffIsDisposed() {
+            String testName = "testTiffIsDisposed";
+            String path = TEST_IMAGES_DIRECTORY + "numbers_01.tif";
+            String tmpPath = System.IO.Path.GetTempFileName();
+            String pdfPath = GetTargetDirectory() + testName + ".pdf";
+            FileInfo file = new FileInfo(tmpPath);
+            File.Copy(path, tmpPath, true);
+            OcrPdfCreator ocrPdfCreator = new OcrPdfCreator(tesseractReader);
+            NUnit.Framework.Assert.IsTrue(System.GC.TryStartNoGCRegion(8*1024*1024));
+            PdfDocument doc = ocrPdfCreator.CreatePdf(JavaCollectionsUtil.SingletonList<FileInfo>(file), GetPdfWriter(
+                pdfPath));
+            File.Delete(tmpPath);
+            System.GC.EndNoGCRegion();
+            NUnit.Framework.Assert.IsNotNull(doc);
+            doc.Close();
+        }
+
+        [NUnit.Framework.Test]
+        public virtual void TestTiffIsDisposedWithoutPreprocessing() {
+            String testName = "testTiffIsDisposedWithoutPreprocessing";
+            String path = TEST_IMAGES_DIRECTORY + "numbers_01.tif";
+            String tmpPath = System.IO.Path.GetTempFileName();
+            String pdfPath = GetTargetDirectory() + testName + ".pdf";
+            FileInfo file = new FileInfo(tmpPath);
+            File.Copy(path, tmpPath, true);
+            tesseractReader.SetTesseract4OcrEngineProperties(tesseractReader.GetTesseract4OcrEngineProperties().SetPreprocessingImages
+                (false));
+            OcrPdfCreator ocrPdfCreator = new OcrPdfCreator(tesseractReader);
+            NUnit.Framework.Assert.IsTrue(System.GC.TryStartNoGCRegion(8 * 1024 * 1024));
+            PdfDocument doc = ocrPdfCreator.CreatePdf(JavaCollectionsUtil.SingletonList<FileInfo>(file), GetPdfWriter(
+                pdfPath));
+            File.Delete(tmpPath);
+            System.GC.EndNoGCRegion();
+            NUnit.Framework.Assert.IsNotNull(doc);
+            doc.Close();
+        }
+
+        [NUnit.Framework.Test]
+        public virtual void TestJpegIsDisposed() {
+            String testName = "testJpegIsDisposed";
+            String path = TEST_IMAGES_DIRECTORY + "numbers_01.jpg";
+            String tmpPath = System.IO.Path.GetTempFileName();
+            String pdfPath = GetTargetDirectory() + testName + ".pdf";
+            FileInfo file = new FileInfo(tmpPath);
+            File.Copy(path, tmpPath, true);
+            OcrPdfCreator ocrPdfCreator = new OcrPdfCreator(tesseractReader);
+            NUnit.Framework.Assert.IsTrue(System.GC.TryStartNoGCRegion(8 * 1024 * 1024));
+            PdfDocument doc = ocrPdfCreator.CreatePdf(JavaCollectionsUtil.SingletonList<FileInfo>(file), GetPdfWriter(
+                pdfPath));
+            File.Delete(tmpPath);
+            System.GC.EndNoGCRegion();
+            NUnit.Framework.Assert.IsNotNull(doc);
+            doc.Close();
+        }
+
         /// <summary>Parse text from image and compare with expected.</summary>
         private void TestImageOcrText(AbstractTesseract4OcrEngine tesseractReader, String path, String expectedOutput
             ) {
